@@ -1,9 +1,10 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import Header from '@/components/Header';
 
-export default function CabsPage() {
+function CabsContent() {
   const searchParams = useSearchParams();
 
   const pickupCity = searchParams.get('pickup') || '';
@@ -149,7 +150,7 @@ export default function CabsPage() {
                 </div>
                 <div className="border-b border-gray-200 pb-4">
                   <h3 className="font-semibold text-gray-900 mb-2">What if the driver is late?</h3>
-                  <p className="text-gray-600 text-sm">We track all our vehicles in real-time. If there's a delay, we'll notify you immediately and provide updates.</p>
+                  <p className="text-gray-600 text-sm">We track all our vehicles in real-time. If there&apos;s a delay, we&apos;ll notify you immediately and provide updates.</p>
                 </div>
                 <div className="border-b border-gray-200 pb-4">
                   <h3 className="font-semibold text-gray-900 mb-2">Do you provide child seats?</h3>
@@ -236,6 +237,21 @@ export default function CabsPage() {
           </div>
         </div>
       </footer>
-    </div>
+     </div>
+   );
+}
+
+export default function CabsPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-screen min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <CabsContent />
+    </Suspense>
   );
 }
