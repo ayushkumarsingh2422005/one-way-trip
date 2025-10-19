@@ -1,43 +1,31 @@
-'use client';
-
+import React from 'react';
 import Link from 'next/link';
 
-export default function Header() {
+const Header: React.FC = () => {
   return (
-    <header className="bg-gray-900/80 backdrop-blur-md text-white p-3 md:p-6 shadow-lg">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2 md:space-x-3">
-          <div className="w-6 h-6 md:w-8 md:h-8 bg-yellow-400 rounded-full flex items-center justify-center">
-            <span className="text-gray-900 font-bold text-xs md:text-sm">C</span>
+    <header className="bg-yellow-500 text-black shadow-lg">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center">
+              <svg className="w-7 h-7 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-black">TaxiEase</h1>
+              <p className="text-gray-800 text-sm">One-Way Trip Booking</p>
+            </div>
+          </Link>
+          <div className="hidden md:flex items-center space-x-6">
+            <Link href="/" className="hover:text-gray-800 transition-colors font-medium">Home</Link>
+            <Link href="/cars" className="hover:text-gray-800 transition-colors font-medium">Cars</Link>
+            <a href="https://www.carondesire.com/contact" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors font-medium">Contact</a>
           </div>
-          <div>
-            <h1 className="text-lg md:text-2xl font-bold">cabbazar</h1>
-            <p className="text-xs md:text-sm text-gray-300 hidden md:block">All India Cab Service</p>
-          </div>
-        </Link>
-        
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link href="/" className="text-gray-300 hover:text-white transition-colors">
-            Home
-          </Link>
-          <Link href="/cabs" className="text-gray-300 hover:text-white transition-colors">
-            Book Cab
-          </Link>
-          <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
-            About
-          </Link>
-          <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
-            Contact
-          </Link>
-        </nav>
-
-        {/* Mobile menu button */}
-        <button className="md:hidden text-white">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        </div>
       </div>
     </header>
   );
-}
+};
+
+export default Header;
