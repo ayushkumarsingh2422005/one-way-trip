@@ -16,7 +16,7 @@ const RouteSelection: React.FC<RouteSelectionProps> = ({ onRouteChange }) => {
   // Get available cities based on swap state
   const getAvailableFromCities = (): string[] => {
     if (isSwapped) {
-      return ['Ludhiana', 'Panawal']; // When swapped, From has 2 options
+      return ['Ludhiana', 'Chandigarh']; // When swapped, From has 2 options
     } else {
       return ['Delhi']; // Default: From is fixed as Delhi
     }
@@ -26,7 +26,7 @@ const RouteSelection: React.FC<RouteSelectionProps> = ({ onRouteChange }) => {
     if (isSwapped) {
       return ['Delhi']; // When swapped, To is fixed as Delhi
     } else {
-      return ['Ludhiana', 'Panawal']; // Default: To has 2 options
+      return ['Ludhiana', 'Chandigarh']; // Default: To has 2 options
     }
   };
 
@@ -43,12 +43,12 @@ const RouteSelection: React.FC<RouteSelectionProps> = ({ onRouteChange }) => {
   const handleSwap = () => {
     setIsSwapped(!isSwapped);
     if (!isSwapped) {
-      // Swapping to: From = Ludhiana/Panawal, To = Delhi
+      // Swapping to: From = Ludhiana/Chandigarh, To = Delhi
       setFrom('Ludhiana');
       setTo('Delhi');
       onRouteChange('Ludhiana', 'Delhi');
     } else {
-      // Swapping back to: From = Delhi, To = Ludhiana/Panawal
+      // Swapping back to: From = Delhi, To = Ludhiana/Chandigarh
       setFrom('Delhi');
       setTo('Ludhiana');
       onRouteChange('Delhi', 'Ludhiana');
@@ -58,11 +58,9 @@ const RouteSelection: React.FC<RouteSelectionProps> = ({ onRouteChange }) => {
   const getRouteInfo = (from: string, to: string) => {
     const routeMap: { [key: string]: { distance: string; duration: string } } = {
       'Delhi-Ludhiana': { distance: '320 km', duration: '5-6 hours' },
-      'Delhi-Panawal': { distance: '280 km', duration: '4-5 hours' },
+      'Delhi-Chandigarh': { distance: '320 km', duration: '5-6 hours' },
       'Ludhiana-Delhi': { distance: '320 km', duration: '5-6 hours' },
-      'Ludhiana-Panawal': { distance: '180 km', duration: '3-4 hours' },
-      'Panawal-Delhi': { distance: '280 km', duration: '4-5 hours' },
-      'Panawal-Ludhiana': { distance: '180 km', duration: '3-4 hours' }
+      'Chandigarh-Delhi': { distance: '320 km', duration: '5-6 hours' }
     };
     
     return routeMap[`${from}-${to}`] || { distance: 'N/A', duration: 'N/A' };

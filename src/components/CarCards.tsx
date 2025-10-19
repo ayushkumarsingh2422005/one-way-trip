@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Car {
   id: string;
@@ -21,34 +22,24 @@ interface CarCardsProps {
 const getPricing = (from: string, to: string, carId: string): number => {
   const pricing: { [key: string]: { [key: string]: number } } = {
     'Delhi-Ludhiana': {
-      'artiga': 2500,
-      'suv': 3500,
-      'tempo-traveller': 4500
+      'sedan': 4500,
+      'ertiga': 5500,
+      'crysta': 6500
     },
-    'Delhi-Panawal': {
-      'artiga': 2200,
-      'suv': 3200,
-      'tempo-traveller': 4200
+    'Delhi-Chandigarh': {
+      'sedan': 3500,
+      'ertiga': 4500,
+      'crysta': 5500
     },
     'Ludhiana-Delhi': {
-      'artiga': 2500,
-      'suv': 3500,
-      'tempo-traveller': 4500
+      'sedan': 4500,
+      'ertiga': 5500,
+      'crysta': 6500
     },
-    'Ludhiana-Panawal': {
-      'artiga': 1800,
-      'suv': 2800,
-      'tempo-traveller': 3800
-    },
-    'Panawal-Delhi': {
-      'artiga': 2200,
-      'suv': 3200,
-      'tempo-traveller': 4200
-    },
-    'Panawal-Ludhiana': {
-      'artiga': 1800,
-      'suv': 2800,
-      'tempo-traveller': 3800
+    'Chandigarh-Delhi': {
+      'sedan': 3500,
+      'ertiga': 4500,
+      'crysta': 5500
     }
   };
   
@@ -58,27 +49,27 @@ const getPricing = (from: string, to: string, carId: string): number => {
 
 const cars: Car[] = [
   {
-    id: 'artiga',
-    name: 'Artiga',
+    id: 'sedan',
+    name: 'Sedan',
     type: 'SEDAN (AC)',
     features: ['AC', 'Music System', 'Comfortable Seats'],
-    image: '/car-sedan.jpg',
+    image: './sedan.png',
     capacity: '4+1 SEATER'
   },
   {
-    id: 'suv',
-    name: 'SUV',
+    id: 'ertiga',
+    name: 'Ertiga',
     type: 'SUV (AC)',
     features: ['AC', 'Music System', 'Spacious Interior', 'Extra Luggage Space'],
-    image: '/car-suv.jpg',
+    image: './ertiga.png',
     capacity: '6+1 SEATER'
   },
   {
-    id: 'tempo-traveller',
-    name: 'Tempo Traveller',
+    id: 'crysta',
+    name: 'Crysta',
     type: 'MINI BUS (AC)',
     features: ['AC', 'Music System', 'Large Space', 'Group Travel', 'Extra Comfort'],
-    image: '/car-tempo.jpg',
+    image: './suv.avif',
     capacity: '12+1 SEATER'
   }
 ];
@@ -86,9 +77,9 @@ const cars: Car[] = [
 // Get discount percentage for each car
 const getDiscount = (carId: string): number => {
   const discounts: { [key: string]: number } = {
-    'artiga': 10,
-    'suv': 15,
-    'tempo-traveller': 20
+    'sedan': 10,
+    'ertiga': 15,
+    'crysta': 20
   };
   return discounts[carId] || 0;
 };
@@ -102,7 +93,21 @@ const getOriginalPrice = (from: string, to: string, carId: string): number => {
 
 const CarCards: React.FC<CarCardsProps> = ({ from, to }) => {
   const handleBookNow = (carId: string, carName: string) => {
-    alert(`Booking ${carName} - Please contact us for confirmation!`);
+    const car = cars.find(c => c.id === carId);
+    const price = getPricing(from, to, carId);
+    const route = `${from} → ${to}`;
+    
+    // Create URL with booking details
+    const params = new URLSearchParams({
+      car: carName,
+      type: car?.type || '',
+      route: route,
+      price: price.toString(),
+      capacity: car?.capacity || ''
+    });
+    
+    // Navigate to checkout page
+    window.location.href = `/checkout?${params.toString()}`;
   };
 
   return (
@@ -162,12 +167,10 @@ const CarCards: React.FC<CarCardsProps> = ({ from, to }) => {
               return (
                 <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                   {/* Car Image with Discount Tag */}
-                  <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                    <div className="text-center">
-                      <svg className="w-16 h-16 text-gray-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                      </svg>
-                    </div>
+                         <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+                           <div className="text-center relative w-full h-full">
+                             <Image src={car.image} alt={car.name} fill className="object-cover" />
+                           </div>
                     {/* Discount Tag */}
                     <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                       {discount}% OFF
@@ -195,9 +198,9 @@ const CarCards: React.FC<CarCardsProps> = ({ from, to }) => {
                     {/* Similar Models */}
                     <div className="mb-4">
                       <p className="text-gray-600 text-sm">
-                        {car.id === 'artiga' && 'Swift, Dzire or Similar'}
-                        {car.id === 'suv' && 'Innova, Ertiga or Similar'}
-                        {car.id === 'tempo-traveller' && 'Tempo Traveller, Force or Similar'}
+                        {car.id === 'sedan' && 'Swift, Dzire or Similar'}
+                        {car.id === 'ertiga' && 'Innova, Ertiga or Similar'}
+                        {car.id === 'crysta' && 'Tempo Traveller, Force or Similar'}
                       </p>
                     </div>
                     
@@ -207,8 +210,9 @@ const CarCards: React.FC<CarCardsProps> = ({ from, to }) => {
                         <span className="text-gray-600">Included Km</span>
                         <span className="text-green-600 font-semibold">
                           {from === 'Delhi' && to === 'Ludhiana' ? '320 Km' :
-                           from === 'Delhi' && to === 'Panawal' ? '280 Km' :
-                           from === 'Ludhiana' && to === 'Panawal' ? '180 Km' :
+                           from === 'Delhi' && to === 'Chandigarh' ? '320 Km' :
+                           from === 'Ludhiana' && to === 'Delhi' ? '320 Km' :
+                           from === 'Chandigarh' && to === 'Delhi' ? '320 Km' :
                            '320 Km'}
                         </span>
                       </div>

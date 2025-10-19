@@ -1,21 +1,22 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const CarsPage = () => {
   const cars = [
     {
-      id: 'artiga',
-      name: 'Swift Dzire',
+      id: 'sedan',
+      name: 'Sedan',
       type: 'SEDAN (AC)',
       capacity: '4+1 SEATER',
       price: '₹2,200 - ₹2,500',
       images: [
-        { id: 1, src: '/car-sedan-exterior.jpg', alt: 'Swift Dzire Exterior' },
-        { id: 2, src: '/car-sedan-interior.jpg', alt: 'Swift Dzire Interior' },
-        { id: 3, src: '/car-sedan-rear.jpg', alt: 'Swift Dzire Rear' }
+        { id: 1, src: '/sedan_int.png', alt: 'Sedan Exterior' },
+        { id: 2, src: '/sedan_space.avif', alt: 'Sedan Interior' },
+        { id: 3, src: '/sedan.png', alt: 'Sedan Rear' }
       ],
       features: [
         '4 Passengers',
@@ -32,15 +33,15 @@ const CarsPage = () => {
       description: 'Compact sedan known for reliability, comfort, and ideal for long rides. Ideal for daily commutes and city rides.'
     },
     {
-      id: 'suv',
-      name: 'Innova Crysta',
+      id: 'ertiga',
+      name: 'Ertiga',
       type: 'SUV (AC)',
       capacity: '6+1 SEATER',
       price: '₹2,800 - ₹3,500',
       images: [
-        { id: 1, src: '/car-suv-exterior.jpg', alt: 'Innova Crysta Exterior' },
-        { id: 2, src: '/car-suv-interior.jpg', alt: 'Innova Crysta Interior' },
-        { id: 3, src: '/car-suv-rear.jpg', alt: 'Innova Crysta Rear' }
+        { id: 1, src: '/ertiga.png', alt: 'Ertiga Exterior' },
+        { id: 2, src: '/ertiga_int.png', alt: 'Ertiga Interior' },
+        { id: 3, src: '/ertiga_space.webp', alt: 'Ertiga Rear' }
       ],
       features: [
         '6+1 Passengers',
@@ -57,15 +58,14 @@ const CarsPage = () => {
       description: 'Spacious SUV perfect for larger groups and families. Excellent comfort and ample luggage space for extended journeys.'
     },
     {
-      id: 'tempo-traveller',
-      name: 'Tempo Traveller',
+      id: 'crysta',
+      name: 'Crysta',
       type: 'MINI BUS (AC)',
       capacity: '12+1 SEATER',
       price: '₹3,800 - ₹4,500',
       images: [
-        { id: 1, src: '/car-tempo-exterior.jpg', alt: 'Tempo Traveller Exterior' },
-        { id: 2, src: '/car-tempo-interior.jpg', alt: 'Tempo Traveller Interior' },
-        { id: 3, src: '/car-tempo-rear.jpg', alt: 'Tempo Traveller Rear' }
+        { id: 1, src: './suv.avif', alt: 'Crysta Exterior' },
+        { id: 2, src: '/suv_int.png', alt: 'Crysta Interior' }
       ],
       features: [
         '12+1 Passengers',
@@ -112,12 +112,10 @@ const CarsPage = () => {
                   <div className="md:w-1/2 p-8">
                     {/* Main Image */}
                     <div className="mb-4">
-                      <div className="h-80 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                        <div className="text-center">
-                          <svg className="w-24 h-24 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                          </svg>
-                          <p className="text-gray-600 font-medium">{cars[selectedCar].name}</p>
+                      <div className="h-80 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+                        <div className="text-center relative w-full h-full">
+                          <Image src={cars[selectedCar].images[selectedImage].src} alt={cars[selectedCar].images[selectedImage].alt} fill className="object-cover" />
+                          {/* <p className="text-gray-600 font-medium">{cars[selectedCar].name}</p> */}
                         </div>
                       </div>
                     </div>
@@ -132,10 +130,8 @@ const CarsPage = () => {
                           }`}
                           onClick={() => setSelectedImage(index)}
                         >
-                          <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                            <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                          <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+                            <Image src={image.src} alt={image.alt} fill className="object-cover" />
                           </div>
                         </div>
                       ))}
@@ -175,15 +171,25 @@ const CarsPage = () => {
                     </div>
 
                     {/* Book Button */}
-                    {/* <button
-                      onClick={() => window.location.href = '/'}
+                    <button
+                      onClick={() => {
+                        const car = cars[selectedCar];
+                        const params = new URLSearchParams({
+                          car: car.name,
+                          type: car.type,
+                          route: 'Delhi → Ludhiana', // Default route
+                          price: car.price.split(' - ')[0].replace('₹', ''), // Get minimum price
+                          capacity: car.capacity
+                        });
+                        window.location.href = `/checkout?${params.toString()}`;
+                      }}
                       className="bg-blue-500 text-white py-3 px-8 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-300 flex items-center"
                     >
                       Book This Vehicle
                       <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
-                    </button> */}
+                    </button>
                   </div>
                 </div>
               </div>

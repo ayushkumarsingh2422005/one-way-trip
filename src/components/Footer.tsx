@@ -56,9 +56,9 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-semibold mb-4">Our Routes</h4>
             <div className="space-y-2 text-sm text-gray-400">
               <div>Delhi → Ludhiana</div>
-              <div>Delhi → Panawal</div>
-              <div>Panawal → Delhi</div>
+              <div>Delhi → Chandigarh</div>
               <div>Ludhiana → Delhi</div>
+              <div>Chandigarh → Delhi</div>
             </div>
           </div>
         </div>
