@@ -19,6 +19,8 @@ const CheckoutForm = () => {
     passengers: 1,
     specialRequests: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Get booking details from URL params
   const carName = searchParams.get('car') || 'Sedan';
@@ -35,9 +37,119 @@ const CheckoutForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Booking submitted! We will contact you shortly for confirmation.');
+    setLoading(true);
+    setError('');
+
+    try {
+      // Create booking
+      const bookingResponse = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customer: {
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email
+          },
+          trip: {
+            from: route.split(' → ')[0],
+            to: route.split(' → ')[1],
+            pickupDate: formData.pickupDate,
+            pickupTime: formData.pickupTime,
+            pickupAddress: formData.pickupAddress,
+            dropAddress: formData.dropAddress,
+            passengers: formData.passengers,
+            specialRequests: formData.specialRequests
+          },
+          vehicle: {
+            id: carName.toLowerCase(),
+            name: carName,
+            type: carType,
+            capacity: capacity
+          },
+          pricing: {
+            totalAmount: parseInt(price)
+          }
+        }),
+      });
+
+      const bookingData = await bookingResponse.json();
+
+      if (bookingData.success) {
+        // Initialize Razorpay payment
+        const options = {
+          key: bookingData.data.payment.key,
+          amount: bookingData.data.payment.amount,
+          currency: bookingData.data.payment.currency,
+          name: 'TaxiEase',
+          description: `Booking for ${route}`,
+          order_id: bookingData.data.payment.orderId,
+          handler: async function (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) {
+            try {
+              // Verify payment
+              const verifyResponse = await fetch('/api/payments/verify', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  bookingId: bookingData.data.booking.bookingId
+                }),
+              });
+
+              const verifyData = await verifyResponse.json();
+
+              if (verifyData.success) {
+                // Redirect to booking tracking page
+                window.location.href = `/track/${bookingData.data.booking.bookingId}`;
+              } else {
+                alert('Payment verification failed. Please contact support.');
+              }
+            } catch (error) {
+              console.error('Payment verification error:', error);
+              alert('Payment verification failed. Please contact support.');
+            }
+          },
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: formData.phone
+          },
+          theme: {
+            color: '#f59e0b'
+          }
+        };
+
+        const razorpay = new (window as unknown as { 
+          Razorpay: new (options: {
+            key: string;
+            amount: number;
+            currency: string;
+            name: string;
+            description: string;
+            order_id: string;
+            handler: (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => void;
+            prefill: { name: string; email: string; contact: string };
+            theme: { color: string };
+          }) => { open: () => void }
+        }).Razorpay(options);
+        razorpay.open();
+      } else {
+        setError(bookingData.error || 'Failed to create booking');
+      }
+    } catch (error) {
+      console.error('Booking error:', error);
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Set minimum date to today
@@ -60,6 +172,12 @@ const CheckoutForm = () => {
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-lg shadow-md p-6">
                   <h2 className="text-xl font-semibold text-black mb-6">Booking Details</h2>
+                  
+                  {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                      {error}
+                    </div>
+                  )}
                   
                   <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Personal Information */}
@@ -209,9 +327,10 @@ const CheckoutForm = () => {
 
                     <button
                       type="submit"
-                      className="w-full bg-yellow-500 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-300"
+                      disabled={loading}
+                      className="w-full bg-yellow-500 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Confirm Booking
+                      {loading ? 'Processing...' : 'Confirm Booking'}
                     </button>
                   </form>
                 </div>

@@ -21,25 +21,45 @@ interface CarCardsProps {
 // Dynamic pricing based on route
 const getPricing = (from: string, to: string, carId: string): number => {
   const pricing: { [key: string]: { [key: string]: number } } = {
+    // 'Delhi-Ludhiana': {
+    //   'sedan': 4500,
+    //   'ertiga': 5500,
+    //   'crysta': 6500
+    // },
+    // 'Delhi-Chandigarh': {
+    //   'sedan': 3500,
+    //   'ertiga': 4500,
+    //   'crysta': 5500
+    // },
+    // 'Ludhiana-Delhi': {
+    //   'sedan': 4500,
+    //   'ertiga': 5500,
+    //   'crysta': 6500
+    // },
+    // 'Chandigarh-Delhi': {
+    //   'sedan': 3500,
+    //   'ertiga': 4500,
+    //   'crysta': 5500
+    // }
     'Delhi-Ludhiana': {
-      'sedan': 4500,
-      'ertiga': 5500,
-      'crysta': 6500
+      'sedan': 4,
+      'ertiga': 5,
+      'crysta': 6
     },
     'Delhi-Chandigarh': {
-      'sedan': 3500,
-      'ertiga': 4500,
-      'crysta': 5500
+      'sedan': 3,
+      'ertiga': 4,
+      'crysta': 5
     },
     'Ludhiana-Delhi': {
-      'sedan': 4500,
-      'ertiga': 5500,
-      'crysta': 6500
+      'sedan': 4,
+      'ertiga': 5,
+      'crysta': 6
     },
     'Chandigarh-Delhi': {
-      'sedan': 3500,
-      'ertiga': 4500,
-      'crysta': 5500
+      'sedan': 3,
+      'ertiga': 4,
+      'crysta': 5
     }
   };
   
@@ -53,7 +73,7 @@ const cars: Car[] = [
     name: 'Sedan',
     type: 'SEDAN (AC)',
     features: ['AC', 'Music System', 'Comfortable Seats'],
-    image: './sedan.png',
+    image: '/sedan.png',
     capacity: '4+1 SEATER'
   },
   {
@@ -61,7 +81,7 @@ const cars: Car[] = [
     name: 'Ertiga',
     type: 'SUV (AC)',
     features: ['AC', 'Music System', 'Spacious Interior', 'Extra Luggage Space'],
-    image: './ertiga.png',
+    image: '/ertiga.png',
     capacity: '6+1 SEATER'
   },
   {
@@ -69,7 +89,7 @@ const cars: Car[] = [
     name: 'Crysta',
     type: 'MINI BUS (AC)',
     features: ['AC', 'Music System', 'Large Space', 'Group Travel', 'Extra Comfort'],
-    image: './suv.avif',
+    image: '/suv.avif',
     capacity: '12+1 SEATER'
   }
 ];
